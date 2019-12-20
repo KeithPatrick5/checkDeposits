@@ -19,7 +19,10 @@ module.exports.transactionHandler = async trx => {
       for (const output of outputs) {
         if (output.address !== inputAddress) {
           const toAddress = output.address;
-          const amount = tokenType === 'integer' ? parseInt(output.amount) : parseFloat(output.amount);
+          const amount =
+            tokenType === "integer"
+              ? parseInt(output.amount)
+              : parseFloat(output.amount);
           await checkOutput(toAddress, amount, txid, inputAddress);
         }
       }
@@ -38,10 +41,7 @@ const checkOutput = async (toAddress, amount, txid, inputAddress) => {
     return;
   }
 
-  if (!toAddressIncludes) {
-    console.log("toAddress doesn't includes: ", toAddress);
-    return;
-  }
+  if (!toAddressIncludes) return;
 
   if (toAddressIncludes.Item && amount > 0) {
     let res = "";
@@ -92,4 +92,4 @@ const updateEscrowSession = async (userId, amount) => {
 const sum = (val1, val2) => {
   const confVal = Math.pow(10, tokenDecimalPlaces);
   return (confVal * val1 + confVal * val2) / confVal;
-}
+};

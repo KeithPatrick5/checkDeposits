@@ -42,5 +42,6 @@ const bitsocket = new EventSource(url);
 bitsocket.onmessage = function(event) {
   console.log("Socket connected.");
   data = JSON.parse(event.data);
+  console.log(data);
   transactionHandler(data);
 };
