@@ -1,6 +1,3 @@
-/** Return all users SLP addresses from DynamoDB
- *
- */
 require("dotenv").config();
 const AWS = require("aws-sdk");
 
@@ -10,11 +7,13 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
+/** Retrieve user by SLP address from DynamoDB
+ *
+ */
 module.exports.getDepositsTable = async address => {
-  // Retrieve user by SLP address
   let addressData;
   try {
-    var params = {
+    const params = {
       TableName: process.env.AWS_DYNAMODB_DEPOSITS_TABLE,
       Key: {
           address: address
@@ -23,12 +22,10 @@ module.exports.getDepositsTable = async address => {
     
     addressData = await docClient.get(params).promise();
 
-    function isEmpty(obj) {
-      return Object.keys(obj).length === 0;
-    }
     if (isEmpty(addressData)) return false;
   } catch (err) {
     console.log(err);
+    throw err;
   }
 
   return addressData;
@@ -36,7 +33,7 @@ module.exports.getDepositsTable = async address => {
 
 module.exports.saveToDepositsTable = async (address, userId) => {
   // Use SLP Address
-  var params = {
+  const params = {
     TableName: process.env.AWS_DYNAMODB_DEPOSITS_TABLE,
     Item: {
       address: address,
@@ -50,3 +47,6 @@ module.exports.saveToDepositsTable = async (address, userId) => {
   }
 };
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
